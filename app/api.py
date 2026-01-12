@@ -58,7 +58,7 @@ async def lifespan(app: FastAPI):
 # Create FastAPI application
 app = FastAPI(
     title="File Scanner API",
-    description="Microservices-based file scanning system for counting A, B, C characters",
+    description="Microservices-based file scanning system for counting A-Z characters",
     version="1.0.0",
     lifespan=lifespan
 )

@@ -173,7 +173,7 @@ curl http://localhost:8000/health
    - Publishes job to Redis Stream queue
    - Returns job_id immediately
 3. **Worker consumes message** from Redis Stream
-4. **Worker scans file** and counts A, B, C characters
+4. **Worker scans file** and counts A-Z character frequencies
 5. **Worker updates** job status in PostgreSQL and caches results in Redis
 
 ### Deduplication Strategy
@@ -403,46 +403,7 @@ df -h /data/files
 curl -X POST http://localhost:8000/admin/cleanup  # If implemented
 ```
 
-## Senior Developer Interview Highlights
-
-This implementation demonstrates:
-
-### 1. System Design
-- Microservices architecture with clear separation of concerns
-- Content-addressed storage for automatic deduplication
-- Multi-tier caching strategy (Redis + Database)
-- Async processing with message queues
-
-### 2. Performance Optimization
-- Single-pass hash calculation during upload
-- Streaming file processing with constant memory usage
-- Async I/O throughout the stack
-- Database connection pooling
-- Redis pipelining where applicable
-
-### 3. Production Readiness
-- Comprehensive error handling and logging
-- Health check endpoints for monitoring
-- Storage management with tiered cleanup
-- Database migrations and schema versioning
-- Docker containerization
-- Configuration via environment variables
-
-### 4. Code Quality
-- Type hints throughout (Pydantic models)
-- Clean architecture with dependency injection
-- Separation of concerns (database, cache, storage, queue)
-- Comprehensive docstrings
-- Proper resource cleanup (context managers)
-
-### 5. Scalability
-- Horizontal scaling of API and workers
-- Stateless API design
-- Content-addressed storage prevents duplicates
-- Redis Streams for distributed job processing
-- Database indexes for fast queries
-
-### 6. Trade-offs & Design Decisions
+### 5. Trade-offs & Design Decisions
 
 **Why calculate hash in API vs Worker?**
 - API: Zero disk I/O for duplicates (40% savings in high-dup scenarios)

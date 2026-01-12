@@ -129,8 +129,11 @@ class WorkerSimulator:
         file_path = message_data.get('file_path')
         file_size = int(message_data.get('file_size', 0))
 
-        if file_path.startswith('/data/files'):
-            file_path = file_path.replace('/data/files', '/Users/shohamelimelech/Documents/file-scanner-api/data/files')
+        # Path translation for hybrid deployments (Docker API + local worker)
+        docker_path = os.getenv('DOCKER_FILE_PATH', '/data/files')
+        local_path = os.getenv('LOCAL_FILE_PATH', settings.file_storage_path)
+        if file_path.startswith(docker_path) and docker_path != local_path:
+            file_path = file_path.replace(docker_path, local_path)
 
         logger.info(f"Processing {job_id}")
 

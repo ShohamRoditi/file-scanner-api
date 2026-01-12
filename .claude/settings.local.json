@@ -13,7 +13,8 @@
       "Bash(kill:*)",
       "Bash(xargs:*)",
       "Bash(find:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(wc:*)"
     ]
   }
 }
