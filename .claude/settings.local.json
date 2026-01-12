@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker exec:*)",
+      "Bash(source venv/bin/activate)",
+      "Bash(python3:*)",
+      "Bash(lsof:*)",
+      "Bash(docker volume:*)",
+      "Bash(docker-compose down:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(jq:*)",
+      "Bash(kill:*)",
+      "Bash(xargs:*)",
+      "Bash(find:*)",
+      "Bash(pkill:*)"
+    ]
+  }
+}

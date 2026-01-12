@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: file_scanner_db
+    environment:
+      POSTGRES_USER: scanner_user
+      POSTGRES_PASSWORD: scanner_pass
+      POSTGRES_DB: file_scanner
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scanner_user -d file_scanner"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - scanner_network
+
+  # Redis (Cache + Queue)
+  redis:
+    image: redis:7-alpine
+    container_name: file_scanner_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks:
+      - scanner_network
+
+  # API Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: file_scanner_api
+    environment:
+      DATABASE_URL: postgresql://scanner_user:scanner_pass@postgres:5432/file_scanner
+      REDIS_URL: redis://redis:6379/0
+      FILE_STORAGE_PATH: /data/files
+      API_HOST: 0.0.0.0
+      API_PORT: 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data/files:/data/files
+      - ./app:/app/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - scanner_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  file_storage:
+
+networks:
+  scanner_network:
+    driver: bridge

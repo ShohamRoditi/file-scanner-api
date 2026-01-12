@@ -1,0 +1,7 @@
+AAABBBCCC Hello World AAABBBCCC
+This is a test file for the file scanner API.
+It contains characters A, B, and C that will be counted.
+AAAAAA BBBBBB CCCCCC
+More text with ABC characters scattered throughout.
+Testing the character counting: ABCABCABCABC
+End of test file.
